@@ -756,6 +756,55 @@ public class Main {
 
         return sb.toString();
     }
+
+//    把只包含质因子2、3和5的数称作丑数（Ugly Number）。
+// 例如6、8都是丑数，但14不是，因为它包含质因子7。
+// 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数
+
+    public int GetUglyNumber_Solution(int index){
+        if(index <= 0) return 0;
+
+        int[] uglyNumbers = new int[index];
+
+        uglyNumbers[0] = 1;
+        int nextIndex = 1;
+
+        int numberMyltiply2Index = 0;
+        int numberMyltiply3Index = 0;
+        int numberMyltiply5Index = 0;
+
+        while(nextIndex < index){
+            int min = min(uglyNumbers[numberMyltiply2Index]*2,
+                    uglyNumbers[numberMyltiply3Index]*3,
+                    uglyNumbers[numberMyltiply5Index]*5);
+            uglyNumbers[nextIndex] = min;
+
+            while (uglyNumbers[numberMyltiply2Index]*2 <= uglyNumbers[nextIndex]){
+                numberMyltiply2Index++;
+            }
+
+            while (uglyNumbers[numberMyltiply3Index]*3 <= uglyNumbers[nextIndex]){
+                numberMyltiply3Index++;
+            }
+
+            while (uglyNumbers[numberMyltiply5Index]*5 <= uglyNumbers[nextIndex]){
+                numberMyltiply5Index++;
+            }
+
+            nextIndex++;
+        }
+        return uglyNumbers[index-1];
+    }
+
+    public int min(int number1,int number2,int number3){
+        int min = (number1 > number2)?number2:number1;
+        return min = (number3 > min)?min:number3;
+    }
+
+    public static void main(String[] args){
+        Main main = new Main();
+        System.out.println(main.GetUglyNumber_Solution(1500));
+    }
 }
 
 
