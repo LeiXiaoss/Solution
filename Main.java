@@ -801,9 +801,47 @@ public class Main {
         return min = (number3 > min)?min:number3;
     }
 
+//    public static void main(String[] args){
+//        Main main = new Main();
+//        System.out.println(main.GetUglyNumber_Solution(1500));
+//    }
+
+//    在一个字符串(0<=字符串长度<=10000，全部由字母组成)
+// 中找到第一个只出现一次的字符,并返回它的位置,
+// 如果没有则返回 -1（需要区分大小写）.
+
+    public int FirstNotRepeatingChar(String str){
+        int length = str.length();
+
+        if (length == 0) return -1;
+
+        char[] chars = new char[length];
+        chars = str.toCharArray();
+
+        Map<Character,Integer> charHashMap = new LinkedHashMap<>();
+
+        for (int i=0;i<length;i++){
+            if (!charHashMap.containsKey(chars[i])){
+                charHashMap.put(chars[i],1);
+            }else {
+                int times = charHashMap.get(chars[i]);
+                charHashMap.put(chars[i],times+1);
+            }
+        }
+
+        int firstNoRepIndex = -1;
+        for (int i=0;i<length;i++){
+            if(charHashMap.get(chars[i]) == 1){
+                firstNoRepIndex = i ;
+                break;
+            }
+        }
+
+        return firstNoRepIndex;
+    }
+
     public static void main(String[] args){
-        Main main = new Main();
-        System.out.println(main.GetUglyNumber_Solution(1500));
+        System.out.println(new Main().FirstNotRepeatingChar("abaccdeff"));
     }
 }
 
