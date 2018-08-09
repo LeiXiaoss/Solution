@@ -911,8 +911,83 @@ public class Main {
         return (left+right+count)%1000000007;
     }
 
-    public static void main(String[] args){
-        System.out.println(new Main().InversePairs(new int[]{7,5,6,4}));
+//    public static void main(String[] args){
+//        System.out.println(new Main().InversePairs(new int[]{7,5,6,4}));
+//    }
+
+//    输入两个链表，找出它们的第一个公共结点。
+
+    //借助栈，用空间换时间，时间复杂度O(m+n),空间复杂度O(m+n)
+    public ListNode FindFirstCommonNode(ListNode pHead1,ListNode pHead2){
+        if(pHead1 == null || pHead2 == null){
+            return null;
+        }
+
+        Stack<ListNode> stack1 = new Stack<>();
+        Stack<ListNode> stack2 = new Stack<>();
+
+        while (pHead1 != null){
+            stack1.push(pHead1);
+            pHead1 = pHead1.next;
+        }
+
+        while (pHead2 != null){
+            stack2.push(pHead2);
+            pHead2 = pHead2.next;
+        }
+
+        ListNode currentListNode = null;
+
+        while(!stack1.isEmpty() && !stack2.isEmpty() && stack1.peek() == stack2.peek()){
+            stack1.pop();
+            currentListNode = stack2.pop();
+        }
+
+        return currentListNode;
+    }
+
+    //不借助栈
+    public ListNode FindFirstCommonNode2(ListNode pHead1,ListNode pHead2){
+        if(pHead1 == null || pHead2 == null) return null;
+
+        int length1 = getListNodeLength(pHead1);
+        int length2 = getListNodeLength(pHead2);
+        int lengthDiff = length1 - length2;
+
+        ListNode pHeadLong = pHead1;
+        ListNode pHeadShort = pHead2;
+        if(length1 < length2){
+            pHeadLong = pHead2;
+            pHeadShort = pHead1;
+            lengthDiff = length2 - length1;
+        }
+
+        for (int i=0;i<lengthDiff;i++){
+            pHeadLong = pHeadLong.next;
+        }
+
+        ListNode commonNode = null;
+        while (pHeadLong != null && pHeadShort != null){
+            if(pHeadLong == pHeadShort){
+                commonNode = pHeadShort;
+                break;
+            }else {
+                pHeadLong = pHeadLong.next;
+                pHeadShort = pHeadShort.next;
+            }
+        }
+        return commonNode;
+    }
+
+    private int getListNodeLength(ListNode pHead) {
+        int length = 0;
+
+        while(pHead != null){
+            pHead = pHead.next;
+            length++;
+        }
+
+        return length;
     }
 }
 
