@@ -849,8 +849,70 @@ public class Main {
 // 求出这个数组中的逆序对的总数P。
 // 并将P对1000000007取模的结果输出。 即输出P%1000000007
 
-    public int Inversepairs(int[] array){
+    public int InversePairs(int[] array){
+        if(array == null || array.length == 0){
+            return 0;
+        }
 
+        int[] copy = new int[array.length];
+
+        for (int i=0;i<array.length;i++){
+            copy[i] = array[i];
+        }
+
+        int count = InversePairsCore(array,copy,0,array.length-1);
+
+        return count;
+    }
+
+    public int InversePairsCore(int[] array,int[] copy,int start,int end){
+        //终止条件
+        if(start == end){
+            return 0;
+        }
+
+        int length = (end - start)/2;
+
+        int left = InversePairsCore(array,copy,start,start+length);
+        int right = InversePairsCore(array,copy,start+length+1,end);
+
+        int i = start + length;
+        int j = end;
+
+        int indexCopy = end;
+        int count = 0;
+
+        while(i>=start&&j>=start+length+1){
+            if(array[i]>array[j]){
+                copy[indexCopy--] = array[i--];
+                count += j-start-length;
+                if (count >= 1000000007){
+                    count = count%1000000007;
+                }
+            }else {
+                copy[indexCopy--] = array[j--];
+            }
+        }
+
+        for (;i>=start;i--){
+            copy[indexCopy--] = array[i];
+        }
+
+        for (;j>=start+length+1;j--){
+            copy[indexCopy--] = array[j];
+        }
+
+        //将最新排序的结果从辅助数组复制到正式数组中
+//        for (int k=0;k<=end;k++){
+//            array[k] = copy[k];
+//        }
+        //如果每次都复制，时间复杂度太高，直接使用排序好的辅助数组
+
+        return (left+right+count)%1000000007;
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Main().InversePairs(new int[]{7,5,6,4}));
     }
 }
 
