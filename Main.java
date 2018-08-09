@@ -840,8 +840,17 @@ public class Main {
         return firstNoRepIndex;
     }
 
-    public static void main(String[] args){
-        System.out.println(new Main().FirstNotRepeatingChar("abaccdeff"));
+//    public static void main(String[] args){
+//        System.out.println(new Main().FirstNotRepeatingChar("abaccdeff"));
+//    }
+
+//    在数组中的两个数字，如果前面一个数字大于后面的数字，
+// 则这两个数字组成一个逆序对。输入一个数组,
+// 求出这个数组中的逆序对的总数P。
+// 并将P对1000000007取模的结果输出。 即输出P%1000000007
+
+    public int Inversepairs(int[] array){
+
     }
 }
 
