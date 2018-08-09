@@ -640,7 +640,8 @@ public class Main {
 
 //    public static void main(String[] args){
 //        Main main = new Main();
-//        System.out.println(main.MoreThanHalfNum_solution2(new int[]{1, 2, 3, 2, 2, 2, 5, 4, 2}));
+//        System.out.println(main.MoreThanHalfNum_solution2(
+// new int[]{1, 2, 3, 2, 2, 2, 5, 4, 2}));
 //    }
 
 //    输入n个整数，找出其中最小的K个数。
@@ -989,6 +990,13 @@ public class Main {
 
         return length;
     }
+
+//统计一个数字在排序数组中出现的次数。
+
+    public int GetNumberOfK(int[] array,int k){
+
+    }
+
 }
 
 
