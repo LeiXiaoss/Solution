@@ -993,9 +993,119 @@ public class Main {
 
 //统计一个数字在排序数组中出现的次数。
 
+    //实用递归求解，用二分分别查找第一次和第二次出现，时间复杂度O(logn)
     public int GetNumberOfK(int[] array,int k){
+        if(array == null || array.length == 0){
+            return 0;
+        }
 
+        if(k < array[0] || array[array.length-1] < k){
+            return 0;
+        }
+
+        int firstIndex = getFirstK(array,k,0,array.length-1);
+        int lastIndex = getLastK(array,k,0,array.length-1);
+
+        int count = 0;
+
+        if(firstIndex > -1 && lastIndex > -1){
+            count = lastIndex - firstIndex + 1;
+        }
+
+        return count;
     }
+
+    public int getFirstK(int[] array,int k,int start,int end){
+        if(start == end){
+            if(array[start] == k){
+                return start;
+            }else {
+                return -1;
+            }
+        }
+
+        int middleIndex = (start + end)/2;
+        int middleNum = array[middleIndex];
+
+        if (middleNum == k){
+            if(middleIndex > start && array[middleIndex-1] != k){
+                return middleIndex;
+            }else if(middleIndex == start){
+                return middleIndex;
+            }else {
+                end = middleIndex-1;
+            }
+        }else if(middleNum > k){
+            end = middleIndex - 1;
+        }else {
+            start = middleIndex + 1;
+        }
+
+        return getFirstK(array,k,start,end);
+    }
+
+    public int getLastK(int[] array,int k,int start,int end){
+        if(start == end){
+            if(array[start] == k){
+                return start;
+            }else {
+                return -1;
+            }
+        }
+
+        int middleIndex = (start + end)/2;
+        int middleNum = array[middleIndex];
+
+        if(middleNum == k){
+            if(middleIndex < end && array[middleIndex+1] != k){
+                return middleIndex;
+            }else if (middleIndex == end){
+                return middleIndex;
+            }else {
+                start = middleIndex + 1;
+            }
+        }else if(middleNum > k){
+            end = middleIndex - 1;
+        }else {
+            start = middleIndex + 1;
+        }
+
+        return getLastK(array,k,start,end);
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Main().GetNumberOfK(new int[]{1,2,3,3,3,3,4,5},3));
+    }
+
+    //不使用递归，使用循环查找（只实现一个函数），时间复杂度是一致的
+    public int getFirstK2(int[] array,int k,int start,int end){
+
+        while(start != end){
+            int middleIndex = (start + end)/2;
+            int middleNum = array[middleIndex];
+
+            if(middleNum == k){
+                if(middleIndex > start && array[middleIndex-1]!=k){
+                    return middleIndex;
+                }else if(middleIndex == start){
+                    return middleIndex;
+                }else {
+                    end = middleIndex - 1;
+                }
+            }else if(middleNum > k){
+                end = middleIndex - 1;
+            }else {
+                start = middleIndex + 1;
+            }
+        }
+
+        if(array[start] == k){
+            return start;
+        }else {
+            return -1;
+        }
+    }
+
 
 }
 
