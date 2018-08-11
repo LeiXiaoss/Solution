@@ -1073,9 +1073,9 @@ public class Main {
         return getLastK(array,k,start,end);
     }
 
-    public static void main(String[] args){
-        System.out.println(new Main().GetNumberOfK(new int[]{1,2,3,3,3,3,4,5},3));
-    }
+//    public static void main(String[] args){
+//        System.out.println(new Main().GetNumberOfK(new int[]{1,2,3,3,3,3,4,5},3));
+//    }
 
     //不使用递归，使用循环查找（只实现一个函数），时间复杂度是一致的
     public int getFirstK2(int[] array,int k,int start,int end){
@@ -1105,6 +1105,31 @@ public class Main {
             return -1;
         }
     }
+
+    //不查找K，查找k+0.5和k-0.5的位置。算法时间复杂度依旧是O(logn),但是明显比第一种做法容易实现。
+    public int GetNumberOfK2(int[] array,int k){
+        return KSearch(array,k+0.5) - KSearch(array,k-0.5);
+    }
+
+    private int KSearch(int[] array,double k){
+        int start = 0;
+        int end = array.length-1;
+
+        while (start <= end){
+            int middle = (start + end)/2;
+            if(array[middle] > k){
+                end = middle - 1;
+            }else if(array[middle] < k){
+                start = middle + 1;
+            }
+        }
+
+        return start;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().GetNumberOfK2(new int[]{1,2,3,3,3,3,4,5},3));
+//    }
 
 
 }
