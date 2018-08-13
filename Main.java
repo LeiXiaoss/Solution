@@ -1,3 +1,6 @@
+import sun.reflect.generics.tree.Tree;
+
+import javax.naming.ldap.LdapContext;
 import java.util.*;
 
 public class Main {
@@ -1131,6 +1134,128 @@ public class Main {
 //        System.out.println(new Main().GetNumberOfK2(new int[]{1,2,3,3,3,3,4,5},3));
 //    }
 
+    //一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字的范围都在0~n-1之内。
+    //在范围0~n-1内的n个数字有且只有一个数字不在该数组，请找出这个数字
+
+    //转化为在排序数组中找出第一个值与下标不相等的元素，
+    //使用二分查找，时间复杂度O(logn)。
+    public int getMissingNumber(int[] array,int length){
+        if(array == null || length <= 0){
+            return -1;
+        }
+
+        int left = 0;
+        int right = length-1;
+
+        while (left <= right){
+            int middleIndex = (right+left)>>1;
+            if(array[middleIndex] != middleIndex){
+                if(array[middleIndex-1] == middleIndex-1 || middleIndex == 0){
+                    return middleIndex;
+                }else {
+                    right = middleIndex-1;
+                }
+            }else if (array[middleIndex] == middleIndex){
+                left = middleIndex+1;
+            }
+        }
+
+        if(left == length){
+            return length;
+        }else {
+            return -1;
+        }
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().getMissingNumber(new int[]{0,1,2,3,4,6,7},7));
+//    }
+
+
+    //单调递增数组，每个元素整数且唯一。找出数组中任意一个数值等于其下标的元素。
+    //{-3,-1,1,3,5} 输出3
+    //二分查找，算法复杂度O(logn)。
+    public int getNumberSameAsIndex(int[] array,int length){
+        if (array == null || length <= 0){
+            return -1;
+        }
+
+        int left = 0;
+        int right = length-1;
+
+        while(left <= right){
+            int middleIndex = (right + left)>>1;
+            if(array[middleIndex] == middleIndex){
+                return middleIndex;
+            }else if(array[middleIndex] > middleIndex){
+                right = middleIndex - 1;
+            }else if(array[middleIndex] < middleIndex){
+                left = middleIndex + 1;
+            }
+        }
+        return -1;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().getNumberSameAsIndex(new int[]{-3,-1,1,3,5},5));
+//    }
+
+    //二叉搜索树的第K大节点
+    //求二叉搜索树的中序遍历，遍历序列的数值是递增排序的
+
+    //递归实现
+    int index = 0;
+    public  TreeNode KthNode(TreeNode root,int k){
+        if(root != null){
+            TreeNode node = KthNode(root.left,k);
+            if(node != null){
+                return node;
+            }
+            index++;
+
+            if(index == k){
+                return root;
+            }
+
+            node = KthNode(root.right,k);
+            if(node != null){
+                return node;
+            }
+        }
+        return null;
+    }
+
+    //非递归实现二叉搜索树中序遍历,使用栈实现，空间复杂度大于使用递归。（用栈保存了数据）
+    public TreeNode KthTreeNode(TreeNode pRoot,int k){
+        if(pRoot == null || k <= 0){
+            return null;
+        }
+
+        int count = 0;
+
+        Stack<TreeNode> LDRStack = new Stack<>();
+        TreeNode KthNode = null;
+
+        while(pRoot != null || !LDRStack.isEmpty()){
+            while (pRoot != null){
+                LDRStack.push(pRoot);
+                pRoot = pRoot.left;
+            }
+
+            pRoot = LDRStack.pop();
+            count++;
+
+            if(count == k){
+                KthNode = pRoot;
+            }
+
+            pRoot = pRoot.right;
+        }
+
+        return KthNode;
+    }
+
+
     //输入一棵二叉树，求该树的深度。
     // 从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，
     // 最长路径的长度为树的深度。
@@ -1145,6 +1270,39 @@ public class Main {
         int right = TreeDepth(root.right);
 
         return Math.max(left,right)+1;
+    }
+
+    //二叉树层次遍历
+    public int TreeDepth2(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+
+        LinkedList<TreeNode> list = new LinkedList<>();
+        list.add(root);
+        //depth深度，count标记，nextCount这一层的大小。
+        int depth=0,count=0,nextCount=1;
+
+        while (list.size() != 0){
+            TreeNode top = list.poll();
+            count++;
+
+            if(top.left != null){
+                list.add(top.left);
+            }
+
+            if(top.right != null){
+                list.add(top.right);
+            }
+
+            if(count == nextCount){
+                nextCount = list.size();
+                count = 0;
+                depth++;
+            }
+        }
+
+        return depth;
     }
 
 
