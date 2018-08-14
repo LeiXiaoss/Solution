@@ -1174,6 +1174,7 @@ public class Main {
 
     //单调递增数组，每个元素整数且唯一。找出数组中任意一个数值等于其下标的元素。
     //{-3,-1,1,3,5} 输出3
+
     //二分查找，算法复杂度O(logn)。
     public int getNumberSameAsIndex(int[] array,int length){
         if (array == null || length <= 0){
@@ -1305,6 +1306,49 @@ public class Main {
         return depth;
     }
 
+    //平衡二叉树
+    //输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+
+    //递归做法,函数调用太多，时间复杂度过高
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if(root == null){
+            return true;
+        }
+
+        int leftDepth = TreeDepth(root.left);
+        int rightDepth = TreeDepth(root.right);
+
+        int dex = leftDepth - rightDepth;
+
+        if(dex > 1 || dex < -1){
+            return false;
+        }
+
+        return IsBalanced_Solution(root.left) && IsBalanced_Solution(root.right);
+    }
+
+    //从后向前遍历，如果有任意一个节点不平衡返回-1(合理剪枝)；
+    public boolean IsBalanced(TreeNode root){
+        return getDepth(root) != -1;
+    }
+
+    private int getDepth(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+
+        int left = getDepth(root.left);
+        if(left == -1) return -1;
+
+        int right = getDepth(root.right);
+        if(right == -1) return -1;
+
+        if(Math.abs(left - right) > 1) {
+            return -1;
+        }else {
+            return Math.max(right,left)+1;
+        }
+    }
 
 }
 
