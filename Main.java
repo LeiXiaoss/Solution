@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.operations.Or;
 import sun.reflect.generics.tree.Tree;
 
 import javax.naming.ldap.LdapContext;
@@ -1349,6 +1350,49 @@ public class Main {
             return Math.max(right,left)+1;
         }
     }
+
+    //一个整型数组里除了两个数字之外，其他的数字都出现了偶数次。
+    // 请写程序找出这两个只出现一次的数字。
+
+    //异或运算
+    public void FindNumsAppearOnce(int[] array,int num1[],int num2[]){
+        if(array == null || array.length<2){
+            return;
+        }
+
+        int OrResult = array[0];
+        for (int i=1;i<array.length;i++){
+            OrResult = array[i]^OrResult;
+        }
+
+        if(OrResult == 0) return;
+
+        int FirstOneIndex = findTheFirstOne(OrResult);
+
+        for (int i=0;i<array.length;i++){
+            if(isBit1(array[i],FirstOneIndex)){
+                num1[0] = num1[0]^array[i];
+            }else {
+                num2[0] = num2[0]^array[i];
+            }
+        }
+    }
+
+    private int findTheFirstOne(int OrResult){
+        String result = Integer.toBinaryString(OrResult);
+
+        int index = result.indexOf('1');
+        return result.length() - index - 1;
+    }
+
+    private boolean isBit1(int num,int index){
+        num = num >> index;
+        return (num & 1)==1;
+    }
+//
+//    public static void main(String[] args){
+//        new Main().FindNumsAppearOnce(new int[]{2,4,3,6,3,2,5,5},new int[1],new int[1]);
+//    }
 
 }
 
