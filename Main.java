@@ -1394,6 +1394,114 @@ public class Main {
 //        new Main().FindNumsAppearOnce(new int[]{2,4,3,6,3,2,5,5},new int[1],new int[1]);
 //    }
 
+    //一个数组中除了一个数字只出现一次之外，其他数字都出现了三次
+    //找出只出现一次的数字
+
+    //转换为二进制，二进制每一位对应的数字相加，如果可以被3整除，这一位为0，否则为1。
+    //注意位运算的操作
+    public int findNumberAppearingOnce(int[] number){
+        if(number == null || number.length <= 0){
+            throw new RuntimeException("Invaild input");
+        }
+
+        int[] bitSum = new int[32];
+        for(int i=0;i<number.length;i++){
+            int bitMask = 1;
+            for (int j=31;j>=0;j--){
+                int bit = number[i] & bitMask;
+
+                if(bit != 0){
+                    bitSum[j] += 1;
+                }
+                bitMask = bitMask << 1;
+            }
+        }
+
+        int result = 0;
+        for (int i=0;i<32;i++){
+            result = result << 1;
+            result += bitSum[i]%3;
+        }
+
+        return result;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().findNumberAppearingOnce(new int[]{28,2,2,2}));
+//    }
+
+    //输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，
+    // 如果有多对数字的和等于S，输出两个数的乘积最小的。
+    public ArrayList<Integer> FindNumbersWithSum(int[] array,int sum){
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        if(array == null || array.length == 0 || sum == 0){
+            return numbers;
+        }
+
+        int leftIndex = 0;
+        int rightindex = array.length - 1;
+
+        while(leftIndex < rightindex){
+            if (array[leftIndex] + array[rightindex] == sum){
+                numbers.add(array[leftIndex]);
+                numbers.add(array[rightindex]);
+
+                break;
+            }else if(array[leftIndex] + array[rightindex] > sum){
+                rightindex --;
+            }else {
+                leftIndex ++;
+            }
+        }
+
+        return numbers;
+    }
+
+
+    //输入一个正数s,打印出所有和为s的连续正数序列（至少含有两个数）。
+    //例如，输入15，打印出三个连续序列1～5，4～7，7～8
+
+    private ArrayList<ArrayList<Integer>> sequenceList = new ArrayList<>();
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum){
+        if(sum < 3) return sequenceList;
+
+        int small = 1;
+        int big = 2;
+        int middle = (sum+1)/2;
+        int curSum = small + big;
+
+        while(small < middle){
+            if(curSum == sum){
+                addSequence(small,big);
+            }
+
+            while(small < middle && curSum > sum){
+                curSum -= small;
+                small++;
+
+                if(curSum == sum){
+                    addSequence(small,big);
+                }
+            }
+
+            big++;
+            //只在上一个序列的基础上相加，提高效率
+            curSum += big;
+        }
+
+        return sequenceList;
+    }
+
+    public void addSequence(int small,int big){
+        ArrayList<Integer> sequence = new ArrayList<>();
+        for (int i=small;i<=big;i++){
+            sequence.add(i);
+        }
+
+        sequenceList.add(sequence);
+    }
+
 }
 
 
