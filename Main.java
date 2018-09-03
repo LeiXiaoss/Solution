@@ -1502,6 +1502,61 @@ public class Main {
         sequenceList.add(sequence);
     }
 
+    //翻转单词顺序。翻转句子中单词顺序，但单词内字符顺序不变
+    //输入“I am a student.” 输出“student. a am I”
+
+    //先翻转整个句子，再翻转句子中每个单词
+    public String ReverseSentence(String str) {
+        if(str == null || str.length() == 0){
+            return str;
+        }
+
+        char[] arr = str.toCharArray();
+        rever(arr,0,arr.length-1);
+
+        int start,end;
+        start = end = 0;
+        while(start < arr.length-1){
+            if(arr[start] == ' '){
+                start++;
+                end++;
+            }else if(arr[end]==' '){
+                rever(arr,start,end-1);
+                start = (end++);
+            }else if(end == arr.length-1){
+                rever(arr,start,end);
+                start = (end++);
+            }else {
+                end++;
+            }
+        }
+
+        String reverStr = "";
+        for (char ch : arr){
+            reverStr += ch;
+        }
+
+        return reverStr;
+    }
+
+    public char[] rever(char[] arr,int start,int end){
+
+        while (start < end){
+            char temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+
+            start++;
+            end--;
+        }
+
+        return arr;
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Main().ReverseSentence("Wonderful"));
+    }
+
 }
 
 
