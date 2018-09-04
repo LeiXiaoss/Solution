@@ -1556,8 +1556,39 @@ public class Main {
 //    public static void main(String[] args){
 //        System.out.println(new Main().ReverseSentence("Wonderful"));
 //    }
-    //还可以使用栈来实现
 
+    //还可以使用栈来实现
+    public String ReverseSentence2(String str) {
+        if(str == null || str.length() == 0) return str;
+
+        str.trim();
+
+        String str2 = str.replaceAll(" ","");
+        int spaceCount = str.length() - str2.length();
+
+        if(spaceCount == 0) return str;
+
+        Stack<String> sequence = new Stack<>();
+
+        StringBuffer temp = new StringBuffer(str);
+        while (temp.indexOf(" ") != -1){
+            int index = temp.indexOf(" ");
+            sequence.push(temp.substring(0,index));
+            temp.delete(0,index+1);
+        }
+        sequence.push(temp.toString());
+
+        String reverseSen = "";
+        while (!sequence.empty()){
+            reverseSen = reverseSen + sequence.pop()+" ";
+        }
+
+        return reverseSen.trim();
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().ReverseSentence2("    a"));
+//    }
 
     //左旋转字符串
     //字符的左旋操作是把字符串前面若干个字符移到字符串的尾部
