@@ -1553,9 +1553,16 @@ public class Main {
         return arr;
     }
 
-    public static void main(String[] args){
-        System.out.println(new Main().ReverseSentence("Wonderful"));
-    }
+//    public static void main(String[] args){
+//        System.out.println(new Main().ReverseSentence("Wonderful"));
+//    }
+    //还可以使用栈来实现
+
+
+    //左旋转字符串
+    //字符的左旋操作是把字符串前面若干个字符移到字符串的尾部
+    //请定义一个函数实现字符串的左旋功能
+    //输入：“abcdefg”,2 输出：“cdefgab”
 
 }
 
