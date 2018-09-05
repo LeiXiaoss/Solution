@@ -1512,7 +1512,7 @@ public class Main {
         }
 
         char[] arr = str.toCharArray();
-        rever(arr,0,arr.length-1);
+        reverse(arr,0,arr.length-1);
 
         int start,end;
         start = end = 0;
@@ -1521,10 +1521,10 @@ public class Main {
                 start++;
                 end++;
             }else if(arr[end]==' '){
-                rever(arr,start,end-1);
+                reverse(arr,start,end-1);
                 start = (end++);
             }else if(end == arr.length-1){
-                rever(arr,start,end);
+                reverse(arr,start,end);
                 start = (end++);
             }else {
                 end++;
@@ -1539,7 +1539,7 @@ public class Main {
         return reverStr;
     }
 
-    public char[] rever(char[] arr,int start,int end){
+    public char[] reverse(char[] arr,int start,int end){
 
         while (start < end){
             char temp = arr[start];
@@ -1594,6 +1594,55 @@ public class Main {
     //字符的左旋操作是把字符串前面若干个字符移到字符串的尾部
     //请定义一个函数实现字符串的左旋功能
     //输入：“abcdefg”,2 输出：“cdefgab”
+
+    //创建一个字符数组就可以了，空间复杂度过高
+    public String LeftRotateString(String str,int n){
+        if(str.length() <= n) return str;
+
+        char[] leftArr = str.substring(0,n).toCharArray();
+        char[] rightArr = str.substring(n,str.length()).toCharArray();
+
+        leftArr = reverse(leftArr,0,leftArr.length-1);
+        rightArr = reverse(rightArr,0,rightArr.length-1);
+
+        char[] arr = new char[str.length()];
+        for(int i=0;i<leftArr.length;i++){
+            arr[i] = leftArr[i];
+        }
+        for(int j=0;j<rightArr.length;j++){
+            arr[j+leftArr.length] = rightArr[j];
+        }
+
+        arr = reverse(arr,0,arr.length-1);
+        String leftRever = "";
+        for (int k=0;k<arr.length;k++){
+            leftRever = leftRever + arr[k];
+        }
+        return leftRever;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().LeftRotateString("abcdefg",2));
+//    }
+
+    public String LeftRotateString2(String str,int n){
+        if(str.length() <= n) return str;
+
+        char[] arr = str.toCharArray();
+
+        reverse(arr,0,n-1);
+        reverse(arr,n,arr.length-1);
+
+        reverse(arr,0,arr.length-1);
+
+        String leftRever = String.valueOf(arr);
+
+        return leftRever;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().LeftRotateString2("abcdefg",2));
+//    }
 
 }
 
