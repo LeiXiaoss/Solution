@@ -1644,6 +1644,39 @@ public class Main {
 //        System.out.println(new Main().LeftRotateString2("abcdefg",2));
 //    }
 
+    //滑动窗口的最大值
+    //给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。
+    // 例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，
+    // 那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}
+
+    //维持一个两端开口的队列，保存可能的最大值的下标
+    public ArrayList<Integer> maxInWindows(int[] num ,int size){
+        LinkedList<Integer> index = new LinkedList<>();
+        ArrayList<Integer> ret = new ArrayList<>();
+
+        if(num.length < size || size<1) return ret;
+
+        for(int i=0;i<size;i++){
+            while(!index.isEmpty() && num[i] >= num[index.getLast()]){
+                index.removeLast();
+            }
+            index.addLast(i);
+        }
+
+        for(int i=size-1;i<num.length;i++){
+            while(!index.isEmpty() && num[i] >= num[index.getLast()]){
+                index.removeLast();
+            }
+            index.addLast(i);
+
+            if(i-index.getFirst()+1>size){
+                index.removeFirst();
+            }
+            ret.add(num[index.getFirst()]);
+        }
+
+        return ret;
+    }
 }
 
 
