@@ -1677,6 +1677,43 @@ public class Main {
 
         return ret;
     }
+
+    //从扑克牌中抽出5张牌，判断是不是一个顺子，即这五张牌是不是连续的。
+    //A-1,J-11,Q-12,K-13,大王小王可以看成任意数字
+    public boolean isContinuous(int[] numbers){
+        if(numbers == null || numbers.length != 5) return false;
+
+        Arrays.sort(numbers);
+
+        int zeroCount = 0;
+        int gapCount = 0;
+
+        for (int i=0;i<5;i++){
+            if(numbers[i] == 0){
+                zeroCount++;
+            }
+        }
+
+        int small = zeroCount;
+        int big = small + 1;
+
+        while(big < numbers.length){
+            if (numbers[small] == numbers[big]) {
+                return false;
+            }
+
+            gapCount += numbers[big]-numbers[small]-1;
+            small = big;
+            big++;
+
+        }
+        return (zeroCount >= gapCount)?true:false;
+    }
+
+    public static void main(String[] args){
+
+        System.out.println(new Main().isContinuous(new int[]{1,3,4,5,0}));
+    }
 }
 
 
