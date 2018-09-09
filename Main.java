@@ -1710,9 +1710,29 @@ public class Main {
         return (zeroCount >= gapCount)?true:false;
     }
 
-    public static void main(String[] args){
+//    public static void main(String[] args){
+//
+//        System.out.println(new Main().isContinuous(new int[]{1,3,4,5,0}));
+//    }
 
-        System.out.println(new Main().isContinuous(new int[]{1,3,4,5,0}));
+    public int LastRemaining_Solution(int n, int m) {
+        LinkedList<Integer> kids = new LinkedList<>();
+
+        for (int i=0;i<n;i++){
+            kids.add(i);
+        }
+
+        int flag = 0;
+        while (kids.size() > 1){
+            flag = (flag+m-1)%kids.size();
+            kids.remove(flag);
+        }
+
+        return (kids.size() == 1)?kids.get(0):-1;
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Main().LastRemaining_Solution(4,3));
     }
 }
 
