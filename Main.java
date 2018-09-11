@@ -1715,6 +1715,8 @@ public class Main {
 //        System.out.println(new Main().isContinuous(new int[]{1,3,4,5,0}));
 //    }
 
+    //0,1,...,n-1这n个数字排成一个圆圈，从数字0开始，每次从圆圈里删除第m个数字。
+    //求最后一个数字
     public int LastRemaining_Solution(int n, int m) {
         LinkedList<Integer> kids = new LinkedList<>();
 
@@ -1731,9 +1733,51 @@ public class Main {
         return (kids.size() == 1)?kids.get(0):-1;
     }
 
-    public static void main(String[] args){
-        System.out.println(new Main().LastRemaining_Solution(4,3));
+    public int LastRemaining_Solution2(int n,int m){
+        if(n<1 || m<1) return -1;
+
+        int[] cycle = new int[n];
+        int count = n;
+        int i = -1;
+        int step = 0;
+
+        while (count > 0){
+            i++;
+            if(i >= n) i=0;
+            if(cycle[i] == -1) continue;
+
+            step++;
+            if(step == m){
+                cycle[i] = -1;
+                step = 0;
+                count--;
+            }
+        }
+        return i;
     }
-}
+
+    //求一组数的前后最大差值
+    public int MaxDiff(int[] number){
+        if(number == null || number.length == 0){
+            return 0;
+        }
+
+        int min = number[0];
+        int maxDif = number[1] - min;
+
+        for (int i=2;i<number.length;i++){
+            if(number[i] < min) min = number[i];
+
+            int currentDiff = number[i] - min;
+            if(currentDiff > maxDif) maxDif = currentDiff;
+        }
+
+        return maxDif;
+    }
+
+//    public static void main(String[] args){
+//        System.out.println(new Main().MaxDiff(new int[]{9,11,8,5,7,12,16,14}));
+//    }
+  }
 
 
