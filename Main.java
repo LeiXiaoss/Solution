@@ -1810,6 +1810,158 @@ public class Main {
 //        System.out.println(new Main().multipiy(new int[]{1,2,3,4,5}));
 //    }
 
+    //请实现一个函数用来匹配包括'.'和'*'的正则表达式。
+    // 模式中的字符'.'表示任意一个字符，
+    // 而'*'表示它前面的字符可以出现任意次（包含0次）。
+    // 在本题中，匹配是指字符串的所有字符匹配整个模式。
+    // 例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
+    public boolean match(char[] str,char[] pattern){
+        if(str == null || pattern == null){
+            return false;
+        }
+
+        int strIndex = 0;
+        int patternIndex = 0;
+
+        return matchCore2(str,strIndex,pattern,patternIndex);
+    }
+
+    public boolean matchCore2(char[] str, int strIndex, char[] pattern, int patternIndex) {
+        //有效性检验：str到尾，pattern到尾，匹配成功
+        if (strIndex == str.length && patternIndex == pattern.length) {
+            return true;
+        }
+        //pattern先到尾，匹配失败
+        if (strIndex != str.length && patternIndex == pattern.length) {
+            return false;
+        }
+        //模式第2个是*，且字符串第1个跟模式第1个匹配,分3种匹配模式；如不匹配，模式后移2位
+        if (patternIndex + 1 < pattern.length && pattern[patternIndex + 1] == '*') {
+            if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+                return matchCore2(str, strIndex, pattern, patternIndex + 2)//模式后移2，视为x*匹配0个字符
+                        || matchCore2(str, strIndex + 1, pattern, patternIndex + 2)//视为模式匹配1个字符
+                        || matchCore2(str, strIndex + 1, pattern, patternIndex);//*匹配1个，再匹配str中的下一个
+            } else {
+                return matchCore2(str, strIndex, pattern, patternIndex + 2);
+            }
+        }
+        //模式第2个不是*，且字符串第1个跟模式第1个匹配，则都后移1位，否则直接返回false
+        if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+            return matchCore2(str, strIndex + 1, pattern, patternIndex + 1);
+        }
+        return false;
+    }
+
+    //实现一个函数用来找出字符流中第一个只出现一次的字符。
+    // 例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。
+    // 当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+
+    int[] count = new int[256];
+    int charIndex = 1;
+
+    public void Insert(char ch){
+        if(count[ch] == 0){
+            count[ch] = charIndex++;
+        }else {
+            count[ch] = -1;
+        }
+    }
+    public char FirstAppearingOnce(){
+        int temp = Integer.MAX_VALUE;
+        char ch = '#';
+
+        for (int i=0;i<256;i++){
+            if(count[i]!=-1&&count[i]!=0&&count[i]<temp){
+                temp = count[i];
+                ch=(char) i;
+            }
+        }
+        return ch;
+    }
+
+    //给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+
+    public ListNode entryNodeOfLoop(ListNode pHead){
+        if(pHead == null){
+            return null;
+        }
+
+        HashSet<ListNode> nodeSet = new HashSet<>();
+        ListNode pNode = pHead;
+        while(pNode != null){
+            if(!nodeSet.add(pNode)){
+                return pNode;
+            }
+            pNode = pNode.next;
+        }
+
+        return null;
+    }
+
+    public ListNode entryNodeOfLoop2(ListNode pHead){
+        ListNode fast = pHead;
+        ListNode slow = pHead;
+        while(fast.next != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(slow == fast){
+                ListNode p = pHead;
+                while (p != slow){
+                    p = p.next;
+                    slow = slow.next;
+                }
+                return p;
+            }
+        }
+        return null;
+    }
+
+    //在一个排序的链表中，存在重复的结点，
+    // 请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。
+    // 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+
+    public ListNode deleteDuplication(ListNode pHead){
+        if(pHead == null) return null;
+
+        int count = 1;
+        LinkedHashMap<Integer,Integer> nodeMap = new LinkedHashMap<>();
+        while(pHead != null){
+            nodeMap.put(pHead.val,count++);
+            pHead = pHead.next;
+        }
+
+        ListNode pStart = null;
+        while(pHead != null){
+            if(nodeMap.get(pHead.val) == 1){
+                pStart.val = pHead.val;
+                pStart = pStart.next;
+            }
+            pHead = pHead.next;
+        }
+
+        return pStart;
+    }
+
+    public static void main(String[] args){
+        ListNode pHead = new ListNode(1);
+        ListNode p2 = new ListNode(2);
+        ListNode p3 = new ListNode(3);
+        ListNode p4 = new ListNode(4);
+        ListNode p5 = new ListNode(5);
+
+        pHead.next = p2;
+        p2.next = p3;
+        p3.next = p4;
+        p4.next = p5;
+
+        System.out.println(new Main().deleteDuplication(pHead));
+    }
+
+
+
+
 
   }
 
