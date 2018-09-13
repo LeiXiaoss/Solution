@@ -1923,25 +1923,25 @@ public class Main {
     // 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
 
     public ListNode deleteDuplication(ListNode pHead){
-        if(pHead == null) return null;
+        ListNode first = new ListNode(-1);
+        first.next = pHead;
 
-        int count = 1;
-        LinkedHashMap<Integer,Integer> nodeMap = new LinkedHashMap<>();
-        while(pHead != null){
-            nodeMap.put(pHead.val,count++);
-            pHead = pHead.next;
-        }
+        ListNode p = pHead;
+        ListNode last = first;
 
-        ListNode pStart = null;
-        while(pHead != null){
-            if(nodeMap.get(pHead.val) == 1){
-                pStart.val = pHead.val;
-                pStart = pStart.next;
+        while(p != null && p.next != null){
+            if(p.val == p.next.val){
+                int val = p.val;
+                while(p != null && p.val == val){
+                    p = p.next;
+                }
+                last.next = p;
+            }else {
+                last = p;
+                p = p.next;
             }
-            pHead = pHead.next;
         }
-
-        return pStart;
+        return first.next;
     }
 
     public static void main(String[] args){
