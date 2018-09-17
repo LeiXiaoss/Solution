@@ -1944,19 +1944,43 @@ public class Main {
         return first.next;
     }
 
-    public static void main(String[] args){
-        ListNode pHead = new ListNode(1);
-        ListNode p2 = new ListNode(2);
-        ListNode p3 = new ListNode(3);
-        ListNode p4 = new ListNode(4);
-        ListNode p5 = new ListNode(5);
+//    public static void main(String[] args){
+//        ListNode pHead = new ListNode(1);
+//        ListNode p2 = new ListNode(2);
+//        ListNode p3 = new ListNode(3);
+//        ListNode p4 = new ListNode(4);
+//        ListNode p5 = new ListNode(5);
+//
+//        pHead.next = p2;
+//        p2.next = p3;
+//        p3.next = p4;
+//        p4.next = p5;
+//
+//        System.out.println(new Main().deleteDuplication(pHead));
+//    }
 
-        pHead.next = p2;
-        p2.next = p3;
-        p3.next = p4;
-        p4.next = p5;
+    //给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+    // 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
 
-        System.out.println(new Main().deleteDuplication(pHead));
+    public TreeLinkNode GetNext(TreeLinkNode pNode){
+        if(pNode == null) return null;
+
+        if(pNode.right != null){
+            pNode = pNode.right;
+            while (pNode.left != null){
+                pNode = pNode.left;
+            }
+            return pNode;
+        }
+        while(pNode.next != null){
+            if(pNode.next.right == pNode){
+                pNode = pNode.next;
+            }else if(pNode.next.left == pNode){
+                return pNode.next;
+            }
+        }
+
+        return null;
     }
 
 
