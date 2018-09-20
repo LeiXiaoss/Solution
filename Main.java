@@ -1979,14 +1979,165 @@ public class Main {
                 return pNode.next;
             }
         }
-
         return null;
     }
 
+    //请实现一个函数，用来判断一颗二叉树是不是对称的。
+    // 注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
 
+    public boolean isSymmetrical(TreeNode pRoot){
+        if(pRoot == null) return true;
 
+        return isSymmetrical(pRoot.left,pRoot.right);
+    }
 
+    public boolean isSymmetrical(TreeNode left,TreeNode right){
+        if(left == null && right == null) return true;
+        if(left == null || right == null) return false;
 
+        return (left.val == right.val)
+                && isSymmetrical(left.left,right.right)
+                && isSymmetrical(left.right,right.left);
+    }
+
+    //DFS,stack保存节点
+    public boolean isSymmetrical2(TreeNode pRoot){
+        if(pRoot == null) return true;
+
+        Stack<TreeNode> s = new Stack<>();
+
+        s.push(pRoot.left);
+        s.push(pRoot.right);
+
+        while (!s.isEmpty()){
+            TreeNode right = s.pop();
+            TreeNode left = s.pop();
+
+            if(right == null && left == null) continue;
+            if(right == null || left == null) return false;
+            if(right.val != left.val) return false;
+
+            s.push(left.left);
+            s.push(right.right);
+            s.push(left.right);
+            s.push(right.left);
+        }
+
+        return true;
+    }
+
+    //请实现一个函数按照之字形打印二叉树，
+    // 即第一行按照从左到右的顺序打印，
+    // 第二层按照从右至左的顺序打印，
+    // 第三行按照从左到右的顺序打印，其他行以此类推。
+
+    public ArrayList<ArrayList<Integer>> print(TreeNode pRoot){
+        ArrayList<ArrayList<Integer>> printList = new ArrayList<>();
+        if(pRoot == null) return printList;
+
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        int levels = 0;//0代表偶数层，1代表奇数层
+        ArrayList<Integer> levelList = new ArrayList<>();
+
+        stack2.push(pRoot);
+        while (!stack1.isEmpty() || !stack2.isEmpty()){
+
+            if(levels == 0){
+                TreeNode node = stack2.pop();
+                levelList.add(node.val);
+
+                if(node.left != null){
+                    stack1.push(node.left);
+                }
+                if(node.right != null){
+                    stack1.push(node.right);
+                }
+            }else if(levels == 1){
+                TreeNode node = stack1.pop();
+                levelList.add(node.val);
+
+                if(node.right != null){
+                    stack2.add(node.right);
+                }
+                if(node.left != null){
+                    stack2.add(node.left);
+                }
+            }
+
+            if(levels==0&&stack2.isEmpty()){
+                levels = 1;
+                printList.add(levelList);
+                //不能使用clear，否则printList中的对象也会被清空，
+                // 而new相当于创建了一个新的对象，原对象不会被清空
+                levelList = new ArrayList<Integer>();
+                continue;
+            }
+            if(levels==1&&stack1.isEmpty()){
+                levels = 0;
+                printList.add(levelList);
+                levelList = new ArrayList<Integer>();
+                continue;
+            }
+        }
+        return printList;
+    }
+
+    //从上到下按层打印二叉树，同一层结点从左至右输出。
+    // 每一层输出一行。
+
+    public ArrayList<ArrayList<Integer>> printTree(TreeNode pRoot){
+        ArrayList<ArrayList<Integer>> printList = new ArrayList<>();
+        if(pRoot == null) return printList;
+
+        LinkedList<TreeNode> nodeQueue = new LinkedList<>();
+        ArrayList<Integer> levelsList = new ArrayList<>();
+        int levelNum = 1;
+        int printNum = 0;
+
+        nodeQueue.add(pRoot);
+        while (!nodeQueue.isEmpty()){
+            TreeNode node = nodeQueue.pop();
+            levelNum--;
+            levelsList.add(node.val);
+
+            if(node.left != null){
+                nodeQueue.addLast(node.left);
+                printNum++;
+            }
+            if(node.right != null){
+                nodeQueue.addLast(node.right);
+                printNum++;
+            }
+
+            if(levelNum == 0){
+                printList.add(levelsList);
+                levelsList = new ArrayList<Integer>();
+                levelNum = printNum;
+                printNum = 0;
+            }
+        }
+        return printList;
+    }
+
+//    public static void main(String[] args){
+//        TreeNode root = new TreeNode(8);
+//        TreeNode root1 = new TreeNode(10);
+//        TreeNode root2 = new TreeNode(6);
+//        TreeNode root3 = new TreeNode(5);
+//        TreeNode root4 = new TreeNode(7);
+//        TreeNode root5 = new TreeNode(9);
+//        TreeNode root6 = new TreeNode(11);
+//
+//        root.left = root1;
+//        root.right = root2;
+//        root1.left = root3;
+//        root1.right = root4;
+//        root2.left = root5;
+//        root2.right = root6;
+//
+//        new Main().printTree(root);
+//    }
   }
 
 
