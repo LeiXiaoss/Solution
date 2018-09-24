@@ -2120,6 +2120,46 @@ public class Main {
         return printList;
     }
 
+    //请实现两个函数，分别用来序列化和反序列化二叉树
+
+    //从前序遍历和中序遍历可以重建二叉树
+    //要求：1/二叉树中不能有数值重复的节点 2/两个序列全部读出后才可以进行反序列化
+
+    //使用前序遍历，用$来代替空节点
+    public String Serialize(TreeNode root){
+        StringBuffer sb = new StringBuffer();
+
+        if(root == null){
+            sb.append("$,");
+            return sb.toString();
+        }
+
+        sb.append(root.val+",");
+        sb.append(Serialize(root.left));
+        sb.append(Serialize(root.right));
+
+        return sb.toString();
+    }
+    public int sIndex = -1;
+    public TreeNode ReSerialize(String str){
+        sIndex++;
+
+        int len = str.length();
+        if(sIndex >= len){
+            return null;
+        }
+
+        String[] strr = str.split(",");
+        TreeNode node = null;
+        if(!strr[sIndex].equals("$")){
+            node = new TreeNode(Integer.valueOf(strr[sIndex]));
+            node.left = ReSerialize(str);
+            node.right = ReSerialize(str);
+        }
+
+        return node;
+    }
+
 //    public static void main(String[] args){
 //        TreeNode root = new TreeNode(8);
 //        TreeNode root1 = new TreeNode(10);
@@ -2138,6 +2178,55 @@ public class Main {
 //
 //        new Main().printTree(root);
 //    }
+
+    //如何得到一个数据流中的中位数？
+    // 如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。
+    // 如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+    // 我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+    int numCount;
+    //默认是小顶堆
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    //11是初始化容量大小，也可以不指定，默认是11
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>
+            (11,new Comparator<Integer>() {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            return o2.compareTo(o1);
+        }
+    });
+
+    public void Insert(Integer num) {
+        numCount++;
+        //偶数
+        if((numCount&1) == 0){
+            if(!maxHeap.isEmpty() && num<maxHeap.peek()){
+                maxHeap.add(num);
+                num = maxHeap.poll();
+            }
+            minHeap.add(num);
+        }else {
+            if(!minHeap.isEmpty() && num>minHeap.peek()){
+                minHeap.add(num);
+                num = minHeap.poll();
+            }
+            maxHeap.add(num);
+        }
+    }
+
+    public Double GetMedian() {
+        if(numCount == 0){
+            throw new RuntimeException("no number input");
+        }
+
+        double result;
+        if((numCount&1) == 0){
+            result = (maxHeap.peek()+minHeap.peek())/2.0;
+        }else {
+            result = maxHeap.peek();
+        }
+        return result;
+    }
   }
 
 
