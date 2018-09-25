@@ -2227,6 +2227,62 @@ public class Main {
         }
         return result;
     }
+
+    //回溯法
+    //矩阵中的路径
+
+    public boolean hasPath(char[] matrix,int rows,int cols,char[] str){
+        if(matrix == null || rows<1 || cols<1 || str == null){
+            return false;
+        }
+
+        int pathLength = 0;
+
+        boolean[] hasVisited = new boolean[rows*cols];
+        for (int i=0;i<rows*cols-1;i++){
+            hasVisited[i] = false;
+        }
+
+        for (int row=0;row<rows;row++){
+            for (int col=0;col<cols;col++){
+                if(hasPathCore(matrix,rows,cols,row,col,str,pathLength,hasVisited)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasPathCore(char[] matrix,int rows,int cols,int row,int col,
+                               char[] str,int pathLenfth,boolean[] hasVisited){
+        if(str.length == pathLenfth){
+            return true;
+        }
+
+        boolean result = false;
+        if(row>=0 && row<rows && col>=0 && col<cols &&
+                matrix[row*cols+col] == str[pathLenfth]&&
+                !hasVisited[row*cols+col]){
+            pathLenfth++;
+
+            hasVisited[row*cols+col] = true;
+
+            result = hasPathCore(matrix,rows,cols,row,col-1,
+                    str,pathLenfth,hasVisited)||
+                    hasPathCore(matrix,rows,cols,row-1,col,
+                            str,pathLenfth,hasVisited)||
+                    hasPathCore(matrix,rows,cols,row+1,col,
+                            str,pathLenfth,hasVisited)||
+                    hasPathCore(matrix,rows,cols,row,col+1,
+                            str,pathLenfth,hasVisited);
+            if(!result){
+                --pathLenfth;
+                hasVisited[row*cols+col] = false;
+            }
+        }
+        return result;
+    }
   }
 
 
